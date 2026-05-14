@@ -43,6 +43,7 @@ function Index() {
             <Code2 className="h-5 w-5 text-primary" /> Alex.dev
           </a>
           <div className="hidden gap-8 text-sm text-muted-foreground md:flex">
+            <a href="#stack" className="hover:text-foreground transition">Stack</a>
             <a href="#qualification" className="hover:text-foreground transition">Qualification</a>
             <a href="#projects" className="hover:text-foreground transition">Projects</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
