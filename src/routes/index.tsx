@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RotatingText } from "@/components/RotatingText";
+import { TechCube } from "@/components/TechCube";
 import profile from "@/assets/profile.jpg";
 
 export const Route = createFileRoute("/")({
