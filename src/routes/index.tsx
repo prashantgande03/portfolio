@@ -169,28 +169,7 @@ function Index() {
         </div>
       </section>
 
-      <section id="qualification" className="px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-4xl font-bold tracking-tight">Qualification</h2>
-          <p className="mt-2 text-muted-foreground">A short timeline of my education and work.</p>
-
-          <div className="mt-12 relative border-l border-border pl-8">
-            {qualifications.map((q, i) => {
-              const Icon = q.icon;
-              return (
-                <div key={i} className="mb-10 relative">
-                  <span className="absolute -left-[42px] flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">{q.year}</p>
-                  <h3 className="mt-1 text-lg font-semibold">{q.title}</h3>
-                  <p className="text-muted-foreground">{q.place}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <QualificationRoad />
 
       {/* PROJECTS */}
       <section id="projects" className="px-6 py-24 bg-card/30">
