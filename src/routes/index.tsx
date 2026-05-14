@@ -45,12 +45,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const qualifications = [
-  { year: "2023 — Present", title: "B.Tech in Computer Science", place: "State University of Technology", icon: GraduationCap },
-  { year: "2024", title: "Frontend Developer Intern", place: "Pixel Labs", icon: Briefcase },
-  { year: "2023", title: "Full-Stack Web Development", place: "Meta Certificate · Coursera", icon: GraduationCap },
-  { year: "2022", title: "Higher Secondary — Science", place: "Greenwood High, 92%", icon: GraduationCap },
-];
 
 const projects = [
   { title: "TaskFlow", desc: "A minimalist team productivity app with realtime sync and keyboard-first UX.", tags: ["React", "TypeScript", "Supabase"] },
