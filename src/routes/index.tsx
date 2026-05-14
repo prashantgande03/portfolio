@@ -6,8 +6,33 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RotatingText } from "@/components/RotatingText";
-import { TechCube } from "@/components/TechCube";
+import { FloatingCube } from "@/components/FloatingCube";
 import profile from "@/assets/profile.jpg";
+
+const techStack = [
+  { label: "React", color: "#A78BFA" },
+  { label: "TS", color: "#C4B5FD" },
+  { label: "JS", color: "#F0ABFC" },
+  { label: "HTML", color: "#D8B4FE" },
+  { label: "CSS", color: "#A855F7" },
+  { label: "Tailwind", color: "#C084FC" },
+  { label: "Node", color: "#9333EA" },
+  { label: "Java", color: "#E879F9" },
+  { label: "Python", color: "#B794F4" },
+  { label: "Git", color: "#D946EF" },
+  { label: "Figma", color: "#A78BFA" },
+  { label: "SQL", color: "#C084FC" },
+];
+
+// Background floating cubes around the hero
+const heroCubes = [
+  { label: "JS", color: "#F0ABFC", size: 56, top: "10%", left: "8%" },
+  { label: "TS", color: "#A78BFA", size: 48, top: "18%", right: "10%" },
+  { label: "</>", color: "#C084FC", size: 64, bottom: "18%", left: "6%" },
+  { label: "{}", color: "#E879F9", size: 52, bottom: "25%", right: "8%" },
+  { label: "CSS", color: "#D8B4FE", size: 44, top: "55%", left: "3%" },
+  { label: "⚛", color: "#C4B5FD", size: 50, top: "50%", right: "4%" },
+];
 
 export const Route = createFileRoute("/")({
   component: Index,
