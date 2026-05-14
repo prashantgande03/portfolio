@@ -6,8 +6,33 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RotatingText } from "@/components/RotatingText";
-import { TechCube } from "@/components/TechCube";
+import { FloatingCube } from "@/components/FloatingCube";
 import profile from "@/assets/profile.jpg";
+
+const techStack = [
+  { label: "React", color: "#A78BFA" },
+  { label: "TS", color: "#C4B5FD" },
+  { label: "JS", color: "#F0ABFC" },
+  { label: "HTML", color: "#D8B4FE" },
+  { label: "CSS", color: "#A855F7" },
+  { label: "Tailwind", color: "#C084FC" },
+  { label: "Node", color: "#9333EA" },
+  { label: "Java", color: "#E879F9" },
+  { label: "Python", color: "#B794F4" },
+  { label: "Git", color: "#D946EF" },
+  { label: "Figma", color: "#A78BFA" },
+  { label: "SQL", color: "#C084FC" },
+];
+
+// Background floating cubes around the hero
+const heroCubes = [
+  { label: "JS", color: "#F0ABFC", size: 56, top: "10%", left: "8%" },
+  { label: "TS", color: "#A78BFA", size: 48, top: "18%", right: "10%" },
+  { label: "</>", color: "#C084FC", size: 64, bottom: "18%", left: "6%" },
+  { label: "{}", color: "#E879F9", size: 52, bottom: "25%", right: "8%" },
+  { label: "CSS", color: "#D8B4FE", size: 44, top: "55%", left: "3%" },
+  { label: "⚛", color: "#C4B5FD", size: 50, top: "50%", right: "4%" },
+];
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -58,7 +83,26 @@ function Index() {
         className="relative overflow-hidden px-6 pt-20 pb-32"
         style={{ backgroundImage: "var(--gradient-hero)" }}
       >
-        <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
+        {/* Background floating 3D cubes */}
+        <div className="pointer-events-none absolute inset-0">
+          {heroCubes.map((c, i) => (
+            <div
+              key={i}
+              className="pointer-events-auto absolute animate-drift opacity-70 hover:opacity-100"
+              style={{
+                top: c.top,
+                left: c.left,
+                right: c.right,
+                bottom: c.bottom,
+                animationDelay: `${i * 0.6}s`,
+              }}
+            >
+              <FloatingCube label={c.label} color={c.color} size={c.size} />
+            </div>
+          ))}
+        </div>
+
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center text-center">
           <Badge variant="secondary" className="mb-6 animate-fade-up">Available for freelance</Badge>
           <h1 className="animate-fade-up text-5xl font-bold tracking-tight md:text-7xl">
             Hi, I'm <span className="text-neon">Alex Carter</span>
@@ -67,24 +111,22 @@ function Index() {
             I craft thoughtful, fast, and beautiful interfaces for the web.
           </p>
 
-          {/* Photo + rotating circular text + 3D z-axis tilt */}
-          <div className="relative mt-14 perspective">
-            <div className="relative flex items-center justify-center animate-tilt animate-float">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <RotatingText text="• DEVELOPER • PROBLEM SOLVER " radius={150} />
-              </div>
-              <div
-                className="relative h-56 w-56 overflow-hidden rounded-full border-4 md:h-64 md:w-64 animate-pulse-glow"
-                style={{ borderColor: "var(--neon-orange)" }}
-              >
-                <img
-                  src={profile}
-                  alt="Portrait of Alex Carter"
-                  width={512}
-                  height={512}
-                  className="h-full w-full object-cover"
-                />
-              </div>
+          {/* Photo + rotating circular text */}
+          <div className="relative mt-14 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <RotatingText text="• DEVELOPER • PROBLEM SOLVER " radius={150} />
+            </div>
+            <div
+              className="relative h-56 w-56 overflow-hidden rounded-full border-4 md:h-64 md:w-64 animate-pulse-glow"
+              style={{ borderColor: "var(--neon-purple)" }}
+            >
+              <img
+                src={profile}
+                alt="Portrait of Alex Carter"
+                width={512}
+                height={512}
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
 
@@ -94,31 +136,39 @@ function Index() {
         </div>
       </section>
 
-      {/* TECH STACK */}
-      <section id="stack" className="px-6 py-24 bg-card/30">
+      {/* TECH STACK — sliding marquee of cards */}
+      <section id="stack" className="px-6 py-24 bg-card/30 overflow-hidden">
         <div className="mx-auto max-w-6xl text-center">
           <h2 className="text-4xl font-bold tracking-tight">Tech Stack</h2>
           <p className="mt-2 text-muted-foreground">Tools I use to bring ideas to life.</p>
+        </div>
 
-          <div className="mt-16 flex flex-wrap items-center justify-center gap-12">
-            {[120, 100, 130, 110, 120].map((s, i) => (
-              <div key={i} style={{ animationDelay: `${i * 0.4}s` }} className="animate-float">
-                <TechCube size={s} />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 flex flex-wrap justify-center gap-3">
-            {["React","TypeScript","JavaScript","HTML5","CSS3","Tailwind","Node.js","Java","Python","Git","Figma","PostgreSQL"].map((t) => (
-              <Badge key={t} variant="outline" className="border-primary/40 text-foreground px-4 py-2 text-sm">
-                {t}
-              </Badge>
+        <div
+          className="mt-12 relative"
+          style={{
+            maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          }}
+        >
+          <div className="flex w-max animate-marquee gap-5">
+            {[...techStack, ...techStack].map((t, i) => (
+              <Card
+                key={i}
+                className="flex h-28 w-44 flex-shrink-0 flex-col items-center justify-center gap-2 border-primary/30 transition hover:-translate-y-1 hover:border-primary"
+                style={{ boxShadow: `0 0 20px ${t.color}30` }}
+              >
+                <div
+                  className="text-2xl font-bold"
+                  style={{ color: t.color, textShadow: `0 0 12px ${t.color}` }}
+                >
+                  {t.label}
+                </div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">stack</div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* QUALIFICATION */}
       <section id="qualification" className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-4xl font-bold tracking-tight">Qualification</h2>
