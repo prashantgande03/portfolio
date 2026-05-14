@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RotatingText } from "@/components/RotatingText";
+import { TechCube } from "@/components/TechCube";
 import profile from "@/assets/profile.jpg";
 
 export const Route = createFileRoute("/")({
@@ -42,6 +43,7 @@ function Index() {
             <Code2 className="h-5 w-5 text-primary" /> Alex.dev
           </a>
           <div className="hidden gap-8 text-sm text-muted-foreground md:flex">
+            <a href="#stack" className="hover:text-foreground transition">Stack</a>
             <a href="#qualification" className="hover:text-foreground transition">Qualification</a>
             <a href="#projects" className="hover:text-foreground transition">Projects</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
@@ -59,34 +61,60 @@ function Index() {
         <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
           <Badge variant="secondary" className="mb-6 animate-fade-up">Available for freelance</Badge>
           <h1 className="animate-fade-up text-5xl font-bold tracking-tight md:text-7xl">
-            Hi, I'm <span className="text-primary">Alex Carter</span>
+            Hi, I'm <span className="text-neon">Alex Carter</span>
           </h1>
           <p className="mt-4 max-w-xl text-muted-foreground animate-fade-up">
             I craft thoughtful, fast, and beautiful interfaces for the web.
           </p>
 
-          {/* Photo + rotating circular text */}
-          <div className="relative mt-14 flex items-center justify-center animate-float">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <RotatingText text="• DEVELOPER • PROBLEM SOLVER " radius={150} />
-            </div>
-            <div
-              className="relative h-56 w-56 overflow-hidden rounded-full border-4 border-primary/40 md:h-64 md:w-64"
-              style={{ boxShadow: "var(--shadow-glow)" }}
-            >
-              <img
-                src={profile}
-                alt="Portrait of Alex Carter"
-                width={512}
-                height={512}
-                className="h-full w-full object-cover"
-              />
+          {/* Photo + rotating circular text + 3D z-axis tilt */}
+          <div className="relative mt-14 perspective">
+            <div className="relative flex items-center justify-center animate-tilt animate-float">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <RotatingText text="• DEVELOPER • PROBLEM SOLVER " radius={150} />
+              </div>
+              <div
+                className="relative h-56 w-56 overflow-hidden rounded-full border-4 md:h-64 md:w-64 animate-pulse-glow"
+                style={{ borderColor: "var(--neon-orange)" }}
+              >
+                <img
+                  src={profile}
+                  alt="Portrait of Alex Carter"
+                  width={512}
+                  height={512}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
           </div>
 
           <p className="mt-20 text-sm uppercase tracking-[0.4em] text-muted-foreground">
-            Working as <span className="text-primary">Developer · Problem Solver</span>
+            Working as <span className="text-neon">Developer · Problem Solver</span>
           </p>
+        </div>
+      </section>
+
+      {/* TECH STACK */}
+      <section id="stack" className="px-6 py-24 bg-card/30">
+        <div className="mx-auto max-w-6xl text-center">
+          <h2 className="text-4xl font-bold tracking-tight">Tech Stack</h2>
+          <p className="mt-2 text-muted-foreground">Tools I use to bring ideas to life.</p>
+
+          <div className="mt-16 flex flex-wrap items-center justify-center gap-12">
+            {[120, 100, 130, 110, 120].map((s, i) => (
+              <div key={i} style={{ animationDelay: `${i * 0.4}s` }} className="animate-float">
+                <TechCube size={s} />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 flex flex-wrap justify-center gap-3">
+            {["React","TypeScript","JavaScript","HTML5","CSS3","Tailwind","Node.js","Java","Python","Git","Figma","PostgreSQL"].map((t) => (
+              <Badge key={t} variant="outline" className="border-primary/40 text-foreground px-4 py-2 text-sm">
+                {t}
+              </Badge>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -146,9 +174,9 @@ function Index() {
             <h2 className="text-4xl font-bold tracking-tight">Contact me</h2>
             <p className="mt-2 text-muted-foreground">Have a project in mind or just want to say hi? Drop a message.</p>
             <ul className="mt-8 space-y-4 text-sm">
-              <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> alex@example.com</li>
-              <li className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +1 (555) 123-4567</li>
-              <li className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary" /> San Francisco, CA</li>
+              <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /><span>alex@example.com</span></li>
+              <li className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /><span>+1 (555) 123-4567</span></li>
+              <li className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary" /><span>San Francisco, CA</span></li>
             </ul>
             <div className="mt-8 flex gap-3">
               <Button variant="outline" size="icon" asChild><a href="#" aria-label="GitHub"><Github className="h-4 w-4" /></a></Button>
