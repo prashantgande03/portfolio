@@ -174,9 +174,9 @@ function Index() {
             <h2 className="text-4xl font-bold tracking-tight">Contact me</h2>
             <p className="mt-2 text-muted-foreground">Have a project in mind or just want to say hi? Drop a message.</p>
             <ul className="mt-8 space-y-4 text-sm">
-              <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> alex@example.com</li>
-              <li className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +1 (555) 123-4567</li>
-              <li className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary" /> San Francisco, CA</li>
+              <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /><span>alex@example.com</span></li>
+              <li className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /><span>+1 (555) 123-4567</span></li>
+              <li className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary" /><span>San Francisco, CA</span></li>
             </ul>
             <div className="mt-8 flex gap-3">
               <Button variant="outline" size="icon" asChild><a href="#" aria-label="GitHub"><Github className="h-4 w-4" /></a></Button>
