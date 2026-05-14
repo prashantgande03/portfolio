@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RotatingText } from "@/components/RotatingText";
+import { QualificationRoad } from "@/components/QualificationRoad";
 import { FloatingCube } from "@/components/FloatingCube";
 import profile from "@/assets/profile.jpg";
 
