@@ -115,22 +115,31 @@
   50% { transform: rotateY(15deg) rotateX(-5deg); }
 }
 @keyframes pulse-glow {
-  0%,100% { box-shadow: 0 0 20px var(--neon-orange), 0 0 40px oklch(0.78 0.2 55 / 0.4); }
-  50% { box-shadow: 0 0 30px var(--neon-pink), 0 0 60px oklch(0.78 0.22 350 / 0.5); }
+  0%,100% { box-shadow: 0 0 20px var(--neon-purple), 0 0 40px oklch(0.7 0.25 300 / 0.4); }
+  50% { box-shadow: 0 0 30px var(--neon-pink), 0 0 60px oklch(0.65 0.28 280 / 0.5); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes drift {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50% { transform: translate(10px,-15px) rotate(8deg); }
 }
 
 .animate-spin-slow { animation: spin-slow 18s linear infinite; }
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-fade-up { animation: fade-up 0.7s ease-out both; }
-.animate-spin-y { animation: spin-y 6s linear infinite; transform-style: preserve-3d; }
-.animate-tilt { animation: tilt 8s ease-in-out infinite; transform-style: preserve-3d; }
+.animate-spin-y { animation: spin-y 8s linear infinite; transform-style: preserve-3d; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-drift { animation: drift 7s ease-in-out infinite; }
 
 .perspective { perspective: 1000px; }
 .preserve-3d { transform-style: preserve-3d; }
 .text-neon {
-  color: var(--neon-orange);
-  text-shadow: 0 0 8px var(--neon-orange), 0 0 20px oklch(0.78 0.2 55 / 0.6);
+  color: var(--neon-purple);
+  text-shadow: 0 0 8px var(--neon-purple), 0 0 20px oklch(0.7 0.25 300 / 0.6);
 }
 
 
