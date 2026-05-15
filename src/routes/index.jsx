@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Github, Linkedin, Mail, MapPin, Phone, ExternalLink, Code2, Send, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,15 +30,7 @@ const heroCubes = [
     { label: "CSS", color: "#D8B4FE", size: 44, top: "55%", left: "3%" },
     { label: "⚛", color: "#C4B5FD", size: 50, top: "50%", right: "4%" },
 ];
-export const Route = createFileRoute("/")({
-    component: Index,
-    head: () => ({
-        meta: [
-            { title: "prashant.dev — Developer & Problem Solver" },
-            { name: "description", content: "Portfolio of prashant gande — full-stack developer. Explore qualifications, skills, projects, and get in touch." },
-        ],
-    }),
-});
+export default Index;
 const projects = [
     { title: "wanderlust", desc: "a project to show skill and passion for webdev.", tags: ["node", "ejs", "restapi","express.js","mongodb"], rating: 5, plays: "10",url:"https://majorproject-1-af8l.onrender.com/listing" },
     { title: "Grace website", desc: "a website for a gisf company in agro domain,it was project to showcase the company products.", tags: ["mongodb","node.js", "ejs", "express.js"], rating: 4, plays: "null", url:"#" },
