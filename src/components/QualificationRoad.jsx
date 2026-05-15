@@ -47,11 +47,13 @@ function RCCar({ steer = 0 }) {
 export function QualificationRoad() {
     const [progress, setProgress] = useState(0);
     const [speed, setSpeed] = useState(0);
-    const [isMobile, setIsMobile] = useState(false);
     const [lane, setLane] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const [boost, setBoost] = useState(false);
     const sectionRef = useRef(null);
     const rafRef = useRef(null);
+    const lastScrollY = useRef(0);
+    const progressRef = useRef(0);
     const speedRef = useRef(0);
     
     useEffect(() => { speedRef.current = speed; }, [speed]);
@@ -67,54 +69,52 @@ export function QualificationRoad() {
     useEffect(() => {
         const handleScroll = () => {
             if (!sectionRef.current) return;
-            
+
             const rect = sectionRef.current.getBoundingClientRect();
             const windowHeight = window.innerHeight;
-            
-            // Calculate how much of the section is visible
             const sectionTop = rect.top;
             const sectionHeight = rect.height;
-            
-            // Start when section enters viewport, finish when it leaves
-            const startPoint = windowHeight * 0.8; // Start when section is 80% from top
-            const endPoint = -sectionHeight * 0.5; // End when section is halfway scrolled past
-            
+            const startPoint = windowHeight * 0.8;
+            const endPoint = -sectionHeight * 0.5;
+
             let scrollProgress = (startPoint - sectionTop) / (startPoint - endPoint);
             scrollProgress = Math.max(0, Math.min(1, scrollProgress));
-            
-            setProgress(scrollProgress);
-            
-            // Auto speed based on scroll direction
-            const scrollSpeed = Math.abs(scrollProgress - progress);
-            setSpeed(scrollSpeed > 0.01 ? Math.min(1, scrollSpeed * 3) : 0.1);
-            
-            // Add some lane movement for visual interest
+
+            if (Math.abs(scrollProgress - progressRef.current) > 0.005) {
+                progressRef.current = scrollProgress;
+                setProgress(scrollProgress);
+            }
+
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY.current;
+            const normalizedSpeed = Math.min(1, Math.abs(scrollDelta) / 240);
+
+            if (Math.abs(normalizedSpeed - speedRef.current) > 0.02) {
+                speedRef.current = normalizedSpeed;
+                setSpeed(normalizedSpeed);
+            }
+
             if (scrollProgress > 0 && scrollProgress < 1) {
-                const waveLane = Math.sin(scrollProgress * Math.PI * 4) * 0.5;
+                const waveLane = Math.sin(scrollProgress * Math.PI * 2) * 0.5;
                 setLane(waveLane);
             }
+
+            setBoost(Math.abs(scrollDelta) > 12);
+            lastScrollY.current = currentScrollY;
         };
 
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        handleScroll(); // Initial check
-        
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [progress]);
-
-    // Boost effect based on scroll speed
-    useEffect(() => {
-        let lastScrollY = window.scrollY;
-        let scrollSpeed = 0;
-        
-        const checkScrollSpeed = () => {
-            const currentScrollY = window.scrollY;
-            scrollSpeed = Math.abs(currentScrollY - lastScrollY);
-            setBoost(scrollSpeed > 10);
-            lastScrollY = currentScrollY;
+        const onScroll = () => {
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+            rafRef.current = requestAnimationFrame(handleScroll);
         };
-        
-        const interval = setInterval(checkScrollSpeed, 100);
-        return () => clearInterval(interval);
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        handleScroll();
+
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        };
     }, []);
 
     const reset = useCallback(() => {
@@ -124,10 +124,11 @@ export function QualificationRoad() {
         });
         setProgress(0);
         setSpeed(0);
-        setLane(0);
+        setBoost(false);
     }, []);
 
     const thresholdFor = (i) => (i + 0.6) / items.length;
+    const carTop = isMobile ? `${20 + progress * 50}%` : `${15 + progress * 60}%`;
     const speedKmh = Math.round(speed * 280 + (boost ? 40 : 0));
     const completedCount = items.filter((_, i) => progress >= thresholdFor(i)).length;
     const totalXp = items.reduce((acc, it, i) => (progress >= thresholdFor(i) ? acc + it.xp : acc), 0);
@@ -140,7 +141,7 @@ export function QualificationRoad() {
     })), []);
 
     return (
-        <section ref={sectionRef} id="qualification" className="relative overflow-hidden px-4 py-24 sm:px-6" style={{ minHeight: "200vh" }}>
+        <section ref={sectionRef} id="qualification" className="relative overflow-hidden px-4 py-24 sm:px-6" style={{ minHeight: "160vh" }}>
             <div className="pointer-events-none absolute inset-0 opacity-30" style={{
                 backgroundImage: "linear-gradient(var(--neon-purple) 1px, transparent 1px), linear-gradient(90deg, var(--neon-purple) 1px, transparent 1px)",
                 backgroundSize: "60px 60px",
@@ -213,10 +214,24 @@ export function QualificationRoad() {
                             <span className="pointer-events-none absolute inset-y-4 left-2 w-[3px] rounded-full" style={{ background: "var(--neon-purple)", boxShadow: "0 0 14px var(--neon-purple)" }}/>
                             <span className="pointer-events-none absolute inset-y-4 right-2 w-[3px] rounded-full" style={{ background: "var(--neon-pink)", boxShadow: "0 0 14px var(--neon-pink)" }}/>
 
-                            <div className="pointer-events-none absolute inset-y-6 left-1/2 w-[6px] -translate-x-1/2 rounded-full opacity-90" style={{
+                                <div className="pointer-events-none absolute inset-y-6 left-1/2 w-[6px] -translate-x-1/2 rounded-full opacity-90" style={{
                                 backgroundImage: "repeating-linear-gradient(to bottom, rgba(255,255,255,0.9) 0 18px, transparent 18px 38px)",
                                 animation: `roadDash ${Math.max(0.15, 1.4 - speed * 1.2)}s linear infinite`,
                             }}/>
+
+                            <div className="absolute left-1/2 z-30" style={{
+                                top: carTop,
+                                transform: `translateX(calc(-50% + ${lane * 36}px))`,
+                                filter: "drop-shadow(0 8px 18px oklch(0.7 0.25 300 / 0.85)) drop-shadow(0 0 10px var(--neon-pink))",
+                                transition: "top 140ms linear, transform 140ms linear",
+                            }}>
+                                <div className="absolute left-1/2 top-full h-24 w-10 -translate-x-1/2 rounded-full" style={{
+                                    background: "linear-gradient(180deg, var(--neon-pink) 0%, transparent 100%)",
+                                    opacity: 0.4 + speed * 0.5,
+                                    filter: "blur(8px)",
+                                }}/>
+                                <RCCar steer={boost ? 8 : 0}/>
+                            </div>
 
                             {boost && (<>
                                 <div className="pointer-events-none absolute inset-y-0 left-1 w-2 opacity-80" style={{ backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 4px, var(--neon-pink) 4px 10px)", filter: "blur(1px)" }}/>
@@ -225,20 +240,6 @@ export function QualificationRoad() {
 
                             <div className="absolute left-1/2 top-2 -translate-x-1/2 rounded-md border border-primary/50 bg-background/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-primary">Start</div>
                             <div className="absolute left-1/2 bottom-2 -translate-x-1/2 rounded-md border border-[var(--neon-pink)]/60 bg-background/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--neon-pink)]">◤ Finish ◢</div>
-
-                            <div className="absolute left-1/2 z-30" style={{
-                                top: `calc(${progress * 100}% - 46px)`,
-                                transform: `translateX(calc(-50% + ${lane * 36}px))`,
-                                filter: "drop-shadow(0 8px 18px oklch(0.7 0.25 300 / 0.85)) drop-shadow(0 0 10px var(--neon-pink))",
-                                transition: "top 90ms linear",
-                            }}>
-                                <div className="absolute left-1/2 top-full h-24 w-10 -translate-x-1/2 rounded-full" style={{
-                                    background: "linear-gradient(180deg, var(--neon-pink) 0%, transparent 100%)",
-                                    opacity: 0.4 + speed * 0.5,
-                                    filter: "blur(8px)",
-                                }}/>
-                                <RCCar steer={lane * 8}/>
-                            </div>
 
                             {items.map((_, i) => {
                                 const top = `calc(${((i + 0.5) / items.length) * 100}% - 10px)`;

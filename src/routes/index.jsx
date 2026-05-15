@@ -1,4 +1,5 @@
-import { Github, Linkedin, Mail, MapPin, Phone, ExternalLink, Code2, Send, Heart } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Github, Linkedin, Mail, MapPin, Phone, ExternalLink, Code2, Send, Heart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,8 @@ const projects = [
     
 ];
 function Index() {
+    const [menuOpen, setMenuOpen] = useState(false);
+
     return (<main className="min-h-screen bg-background text-foreground">
 
       {/* TOP HUD NAV */}
@@ -54,14 +57,33 @@ function Index() {
             <a href="#contact" className="hover:text-primary">Contact</a>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button asChild size="sm" className="font-mono uppercase tracking-widest">
-              <a href="#qualification">Qualification Race</a>
-            </Button>
-            <Button asChild size="sm" className="font-mono uppercase tracking-widest">
-              <a href="#contact">Hire me</a>
-            </Button>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-expanded={menuOpen}
+              aria-label="Toggle navigation"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:border-primary hover:text-primary lg:hidden"
+            >
+              {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
+            <div className="hidden flex-wrap items-center gap-2 lg:flex">
+              <Button asChild size="sm" className="font-mono uppercase tracking-widest">
+                <a href="#qualification">Qualification Race</a>
+              </Button>
+              <Button asChild size="sm" className="font-mono uppercase tracking-widest">
+                <a href="#contact">Hire me</a>
+              </Button>
+            </div>
           </div>
         </nav>
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-72 border-t border-border" : "max-h-0"}`}>
+          <div className="flex flex-col gap-2 px-4 pb-4 pt-3 text-sm font-mono uppercase tracking-widest text-muted-foreground">
+            <a href="#stack" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary">Stack</a>
+            <a href="#qualification" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary">Qualification</a>
+            <a href="#projects" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary">Projects</a>
+            <a href="#contact" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary">Contact</a>
+          </div>
+        </div>
       </header>
 
       {/* HERO */}
