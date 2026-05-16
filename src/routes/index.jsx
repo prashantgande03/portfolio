@@ -40,6 +40,27 @@ const projects = [
 ];
 function Index() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [reduceMotion, setReduceMotion] = useState(false);
+
+    useEffect(() => {
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const handleMotion = () => setReduceMotion(motionQuery.matches);
+
+      handleResize();
+      handleMotion();
+      window.addEventListener("resize", handleResize, { passive: true });
+      motionQuery.addEventListener("change", handleMotion);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        motionQuery.removeEventListener("change", handleMotion);
+      };
+    }, []);
+
+    const visibleHeroCubes = useMemo(() => (isMobile ? heroCubes.slice(0, 3) : heroCubes), [isMobile]);
+    const rotatingTextRadius = isMobile ? 110 : 150;
 
     return (<main className="min-h-screen bg-background text-foreground">
 
@@ -92,7 +113,7 @@ function Index() {
         <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 2px, rgba(255,255,255,0.04) 2px 3px)" }}/>
 
         <div className="pointer-events-none absolute inset-0">
-          {heroCubes.map((c, i) => (<div key={i} className="pointer-events-auto absolute animate-drift opacity-70 hover:opacity-100" style={{ top: c.top, left: c.left, right: c.right, bottom: c.bottom, animationDelay: `${i * 0.6}s` }}>
+          {visibleHeroCubes.map((c, i) => (<div key={i} className={`absolute opacity-70 ${reduceMotion ? "" : "animate-drift"}`} style={{ top: c.top, left: c.left, right: c.right, bottom: c.bottom, animationDelay: `${i * 0.6}s` }}>
               <FloatingCube label={c.label} color={c.color} size={c.size}/>
             </div>))}
         </div>
